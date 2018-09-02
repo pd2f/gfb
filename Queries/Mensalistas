@@ -1,0 +1,18 @@
+
+select 
+		ev.dtevento as "Data da Contratação/Reativação", 
+		msl.chamensalista as "Número do Mensalista",
+		ps.nmpessoa as "Nome do Mensalista",
+		tp.nmtipopessoa as "Tipo de Pessoa",
+		ct.nrocontato as "Número do Telefone",
+		vc.nrodiavencimento as "Dia do Vencimento"
+from eventos ev
+left join pessoas ps on ev.fkator = ps.idpessoa 
+left join mensalistas msl on msl.idmensalista = ev.fkobjeto
+left join tipospessoas tp on tp.idtipopessoa = ps.fktipopessoa
+left join contatos ct on (ct.fkpessoa = ps.idpessoa or ct.fkpessoa is null)
+left join eventos ev2 on ev2.fkobjeto = msl.idmensalista and ev2.fktipoevento = 3
+left join vencimentos vc on vc.idvencimento = ev2.fkator
+where
+ev.fktipoevento = 2
+and (ct.fktipocontato = 1 or ct.fktipocontato is null);
